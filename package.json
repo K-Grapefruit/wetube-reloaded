@@ -1,0 +1,25 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "The best way to watch videos.",
+  "scripts": {
+    "win": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/K-Grapefruit/wetube-reloaded.git"
+  },
+  "author": "KIM",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/K-Grapefruit/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/K-Grapefruit/wetube-reloaded#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7"
+  }
+}
