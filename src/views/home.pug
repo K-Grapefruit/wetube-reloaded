@@ -1,0 +1,8 @@
+extends base.pug
+include mixins/video
+
+block content 
+            each sexy in videos
+                +video(sexy)
+            else
+                li Sorry nothing Found
