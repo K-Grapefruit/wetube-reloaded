@@ -62,10 +62,11 @@ export const postLogin = async (req, res) => {
       });
     }
   }
-
+  req.session.loggedIn = true;
+  req.session.user = user;
   //check if account exists
   //check if password correct
-  console.log("Log user in! coming soon");
+  console.log(user);
   return res.redirect("/");
 };
 export const edit = (req, res) => res.send("Edit User");

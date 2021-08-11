@@ -7,6 +7,7 @@ import Video from "../models/Video";
 export const home = async (req, res) => {
   const videos = await Video.find({}).sort({ createAt: "desc" }); // database에게 결과 값을 받을 때까지 기다려준다.
   //sort({ createAt: "desc" }) 내림차순
+
   return res.render("home", { pageTitle: videos.title, videos }); // ({뷰 이름} , {템플릿에 보낼 변수})
 };
 export const watch = async (req, res) => {
