@@ -1,6 +1,7 @@
 import "./db";
 import "./models/Video";
 import "./models/User";
+
 import session from "express-session";
 import express, { Router } from "express";
 import morgan from "morgan";
@@ -8,6 +9,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middleware";
+import MongoStore from "connect-mongo";
 
 const app = express();
 const logger = morgan("dev");
@@ -18,11 +20,16 @@ app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true })); // HTML form을 이해하고 그 form을 사용할 수 있는 javascript object형식으로 통역해준다 , 순서대로 실행되기 때문에 router앞에 먼저 작성해줘야함
 // app.get("/", () => console.log("야 이게 뭐야"));
+
+console.log(process.env.COOKIE_SECRET);
 app.use(
   session({
-    secret: "Hello",
-    resave: true,
-    saveUninitialized: true,
+    //비밀로 해야하는 String 을 proceess.env(환경변수)로 바꾸기
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }), //이 부분 지우면 세션이 서버의 메모리에 저장됨
   })
 );
 
