@@ -44,6 +44,7 @@ export const postJoin = async (req, res) => {
 
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
+
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username, socialonly: false });
@@ -71,6 +72,7 @@ export const postLogin = async (req, res) => {
   return res.redirect("/");
 };
 
+//Github Login
 export const startGithubLogin = (req, res) => {
   const BaseUrl = `https://github.com/login/oauth/authorize`;
   const config = {
@@ -112,7 +114,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log(userdata);
+    // console.log(userdata);
     const emaildata = await (
       await fetch(`${apiUri}/user/emails`, {
         headers: {
@@ -121,7 +123,7 @@ export const finishGithubLogin = async (req, res) => {
       })
     ).json();
 
-    console.log(emaildata);
+    // console.log(emaildata);
 
     const emailObj = emaildata.find(
       (email) => email.primary === true && email.verified === true
@@ -157,5 +159,49 @@ export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
-export const edit = (req, res) => res.send("Edit User");
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  // if (tnf && email === edituser.email && username === edituser.username) {
+  //   console.log("username or email already exist ");
+  //   return res.redirect("Edit");
+  // }
+
+  const foundUser = await User.findOne({
+    $or: [{ email: email }, { username: username }],
+  });
+  console.log(foundUser);
+  if (foundUser && foundUser._id.toString() !== _id) {
+    return res.status(400).render("edit-profile", {
+      errorMessage: "already exist name or email",
+      pageTitle: "Edit Profile",
+    });
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name: name,
+      email: email,
+      username: username,
+      location: location,
+    },
+    {
+      new: true,
+    }
+  );
+  req.session.user = updatedUser;
+  console.log("already exist Username or email");
+  return res.redirect("/users/edit");
+};
+
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
 export const see = (req, res) => res.send("See User");
