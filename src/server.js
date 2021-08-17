@@ -41,6 +41,7 @@ app.use((req, res, next) => {
 });
 
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads")); //express에게 누군가 uploads로 가려고 한다면 uploads폴더의 내용을 보여주게 함
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);

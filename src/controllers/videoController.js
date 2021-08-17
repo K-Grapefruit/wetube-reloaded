@@ -1,3 +1,4 @@
+import User from "../models/User";
 import Video from "../models/Video";
 
 //find({비어 있으면 모든 형식을 찾음 } , callback)
@@ -12,7 +13,8 @@ export const home = async (req, res) => {
 };
 export const watch = async (req, res) => {
   const { id } = req.params; // const id = req.params.id
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).populate("owner"); //populate는 owner부분을 실제 User 데이터로 채워준다.
+
   if (video) {
     return res.render("watch", { pageTitle: video.title, video });
   } else {
@@ -52,7 +54,12 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
   // 이곳에서 비디오를 videos array에 추가할 예정
+  const {
+    user: { _id },
+  } = req.session;
+  const { file } = req;
   const { title, description, hashtags } = req.body;
+  console.log("file", file);
   // const video = new Video({
   //   title: title,
   //   description: description,
@@ -69,6 +76,8 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title: title,
       description: description,
+      fileUrl: file.path,
+      owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
     return res.redirect("/");
