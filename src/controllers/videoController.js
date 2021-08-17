@@ -9,7 +9,7 @@ export const home = async (req, res) => {
   const videos = await Video.find({}).sort({ createAt: "desc" }); // database에게 결과 값을 받을 때까지 기다려준다.
   //sort({ createAt: "desc" }) 내림차순
 
-  return res.render("home", { pageTitle: videos.title, videos }); // ({뷰 이름} , {템플릿에 보낼 변수})
+  return res.render("home", { pageTitle: "Home", videos }); // ({뷰 이름} , {템플릿에 보낼 변수})
 };
 export const watch = async (req, res) => {
   const { id } = req.params; // const id = req.params.id
@@ -23,9 +23,15 @@ export const watch = async (req, res) => {
 };
 export const getedit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
   const video = await Video.findById(id);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "video not found" });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Editing `, video });
 };
@@ -37,7 +43,9 @@ export const postEdit = async (req, res) => {
   if (!video === null) {
     return res.status(400).render("404", { pageTitle: "video not found" });
   }
-
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
+  }
   await Video.findByIdAndUpdate(id, {
     title: title,
     description: description,
@@ -73,13 +81,16 @@ export const postUpload = async (req, res) => {
   // await video.save();
   //mongoose가 자동적으로 id를 부여함 , object는 document처럼 ID가 있어야하기때문
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title: title,
       description: description,
       fileUrl: file.path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
+    const user = await User.findById(_id);
+    user.videos.push(newVideo._id);
+    user.save();
     return res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -93,6 +104,13 @@ export const postUpload = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   //delete video
+  const video = await Video.findById(id);
+  if (!Video) {
+    return res.status(400).render("404", { pageTitle: "video not found" });
+  }
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).redirect("/");
+  }
   await Video.findByIdAndDelete(id);
   return res.redirect("/");
 };

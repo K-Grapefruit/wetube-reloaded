@@ -13,13 +13,11 @@ import {
   avatarupload,
   protectedMiddleware,
   publicOnlyMiddleware,
-  uploadFiles,
 } from "../middleware";
 
 const userRouter = express.Router();
-
 userRouter.get("/logout", protectedMiddleware, logout);
-userRouter.get("/:id", see);
+
 userRouter
   .route("/change-password")
   .all(protectedMiddleware)
@@ -33,5 +31,5 @@ userRouter
 //multer가 input으로 avatar파일을 받아서 uplodas파일에 저장하고 그 파일 정보를 postEdit에 전달해준다.
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
-
+userRouter.get("/:id", see);
 export default userRouter;

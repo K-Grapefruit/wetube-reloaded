@@ -146,8 +146,9 @@ export const finishGithubLogin = async (req, res) => {
         location: userdata.location,
       });
     }
-    req.session.loggedIn = true;
     req.session.user = user;
+    req.session.loggedIn = true;
+
     return res.redirect("/");
   } else {
     return res.redirect("/login");
@@ -204,6 +205,7 @@ export const postEdit = async (req, res) => {
 };
 
 export const getEdit = (req, res) => {
+  console.log("오긴오니 시발");
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
@@ -239,14 +241,13 @@ export const postChangePassword = async (req, res) => {
 };
 export const see = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("videos");
   if (!user) {
     return res.status(404).render("404", { pageTitle: `User not Found` });
   }
-  const videos = await Video.find({ owner: user._id });
+
   return res.render("profile", {
     pageTitle: `${user.name}의 Profile`,
     user,
-    videos,
   });
 };
