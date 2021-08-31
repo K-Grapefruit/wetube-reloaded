@@ -6,7 +6,9 @@ import Video from "../models/Video";
 // Video.find({}, (error, videos) => {});
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createAt: "desc" }); // database에게 결과 값을 받을 때까지 기다려준다.
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner"); // database에게 결과 값을 받을 때까지 기다려준다.
   //sort({ createAt: "desc" }) 내림차순
 
   return res.render("home", { pageTitle: "Home", videos }); // ({뷰 이름} , {템플릿에 보낼 변수})
@@ -124,7 +126,7 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(keyword, "i"),
       },
-    });
+    }).populate("owner");
   }
   console.log(videos);
   return res.render("search", { pageTitle: "Search", videos });
