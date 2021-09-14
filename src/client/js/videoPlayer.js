@@ -100,6 +100,7 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
+//SpaceBar 입력시 영상 중지
 const handleSpaceBarevent = (e) => {
   console.log(e);
   const space = e.keyCode;
@@ -118,14 +119,26 @@ const Pin = (e) => {
   e.preventDefault();
 };
 
+const hadnleEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
+
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", hadnleEnded);
+
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
+
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
+
 document.addEventListener("keydown", handleSpaceBarevent);
 window.addEventListener("keydown", Pin);

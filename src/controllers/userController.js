@@ -158,6 +158,7 @@ export const finishGithubLogin = async (req, res) => {
 };
 export const logout = (req, res) => {
   req.session.destroy();
+  req.flash("info", "Good Bye");
   return res.redirect("/");
 };
 
@@ -209,6 +210,11 @@ export const getEdit = (req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
+  if (req.session.user.socialonly === true) {
+    req.flash("error", "Can't change Password");
+
+    return res.redirect("/");
+  }
   return res.render("users/change-password", { pageTitle: "Change Password" });
 };
 export const postChangePassword = async (req, res) => {
@@ -235,7 +241,7 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save(); // 코드 실행시 User.js에 있는 pre save가 작동함 , 새로운 비밀번호를 hash하기 위함
-
+  req.flash("info", "password updated");
   return res.redirect("/users/logout");
 };
 export const see = async (req, res) => {

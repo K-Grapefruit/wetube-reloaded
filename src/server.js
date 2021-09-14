@@ -8,8 +8,10 @@ import morgan from "morgan";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import flash from "express-flash";
 import { localsMiddleware } from "./middleware";
 import MongoStore from "connect-mongo";
+import apiRouter from "./routers/apiRouter";
 
 const app = express();
 const logger = morgan("dev");
@@ -40,12 +42,14 @@ app.use((req, res, next) => {
   });
 });
 
+app.use(flash());
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads")); //express에게 누군가 uploads로 가려고 한다면 uploads폴더의 내용을 보여주게 함
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
 app.use("/users", userRouter);
+app.use("/api", apiRouter);
 
 //정리하자면 app.use()는 모든 요청을 받아들이고
 //app.get()은 Only get 요청만 처리한다 !

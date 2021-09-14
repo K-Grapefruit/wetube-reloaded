@@ -46,6 +46,7 @@ export const postEdit = async (req, res) => {
     return res.status(400).render("404", { pageTitle: "video not found" });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash("error", "You are not the owner of the video ");
     return res.status(403).redirect("/");
   }
   await Video.findByIdAndUpdate(id, {
@@ -130,4 +131,17 @@ export const search = async (req, res) => {
   }
   console.log(videos);
   return res.render("search", { pageTitle: "Search", videos });
+};
+
+//조회수
+export const registerView = async (req, res) => {
+  const { id } = req.params;
+  const video = await Video.findById(id);
+
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  video.meta.views = video.meta.views + 1;
+  video.save();
+  return res.sendStatus(200);
 };

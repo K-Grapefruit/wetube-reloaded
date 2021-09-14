@@ -1,6 +1,8 @@
 extends base.pug
 
 block content
+    div 
+        button#startBtn Start Recording
     if errorMessage
         span=errorMessage
     form(method="POST",enctype="multipart/form-data")
@@ -11,3 +13,5 @@ block content
         input( type ="text",placeholder="Hashtag, separated by coma" , required , name="hashtags")
 
         input(type="submit" , value="Upload Video")
+block script
+    script(src="/static/js/recorder.js")

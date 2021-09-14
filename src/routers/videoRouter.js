@@ -25,7 +25,7 @@ videoRouter
   .get(deleteVideo);
 videoRouter
   .route("/upload")
-  .get(getUpload)
   .all(protectedMiddleware)
+  .get(getUpload)
   .post(videoUpload.single("video"), postUpload);
 export default videoRouter;
