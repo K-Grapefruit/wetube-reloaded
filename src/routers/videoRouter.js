@@ -28,4 +28,5 @@ videoRouter
   .all(protectedMiddleware)
   .get(getUpload)
   .post(videoUpload.single("video"), postUpload);
+
 export default videoRouter;

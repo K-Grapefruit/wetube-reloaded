@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
-
+import Comment from "../models/Comment";
+import { async } from "regenerator-runtime";
 //find({비어 있으면 모든 형식을 찾음 } , callback)
 
 // Video.find({}, (error, videos) => {});
@@ -15,7 +16,9 @@ export const home = async (req, res) => {
 };
 export const watch = async (req, res) => {
   const { id } = req.params; // const id = req.params.id
-  const video = await Video.findById(id).populate("owner"); //populate는 owner부분을 실제 User 데이터로 채워준다.
+  const video = await Video.findById(id).populate("owner").populate("comments"); //populate는 owner부분을 실제 User 데이터로 채워준다.
+
+  console.log(video);
 
   if (video) {
     return res.render("watch", { pageTitle: video.title, video });
@@ -144,4 +147,45 @@ export const registerView = async (req, res) => {
   video.meta.views = video.meta.views + 1;
   video.save();
   return res.sendStatus(200);
+};
+
+export const createComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+
+  const video = await Video.findById(id);
+
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  const comment = await Comment.create({
+    text: text,
+    owner: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  video.save();
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const { id } = req.params;
+  const user = req.session.user._id;
+
+  const comment = await Comment.findById(id);
+
+  if (!comment) {
+    res.sendStatus(404);
+  }
+
+  if (String(comment.owner) !== String(user)) {
+    res.sendStatus(404);
+  }
+
+  await Comment.findByIdAndDelete(id);
+  res.sendStatus(201);
 };

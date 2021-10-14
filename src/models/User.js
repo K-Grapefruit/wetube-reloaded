@@ -9,6 +9,13 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   name: { type: String, required: true },
   location: String,
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Comment",
+    },
+  ],
   videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }], //많은 비디오 담기 위해서
 });
 

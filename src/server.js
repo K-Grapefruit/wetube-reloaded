@@ -21,6 +21,7 @@ app.set("view engine", "pug"); //뷰 엔진을 pug로 세팅 , Express는 HTML�
 app.set("views", process.cwd() + "/src/views");
 app.use(logger);
 app.use(express.urlencoded({ extended: true })); // HTML form을 이해하고 그 form을 사용할 수 있는 javascript object형식으로 통역해준다 , 순서대로 실행되기 때문에 router앞에 먼저 작성해줘야함
+app.use(express.json());
 // app.get("/", () => console.log("야 이게 뭐야"));
 
 console.log(process.env.COOKIE_SECRET);

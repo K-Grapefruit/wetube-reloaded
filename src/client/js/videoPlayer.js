@@ -102,7 +102,6 @@ const handleMouseLeave = () => {
 
 //SpaceBar 입력시 영상 중지
 const handleSpaceBarevent = (e) => {
-  console.log(e);
   const space = e.keyCode;
   if (space === 32) {
     if (video.paused) {
@@ -115,9 +114,9 @@ const handleSpaceBarevent = (e) => {
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
-const Pin = (e) => {
-  e.preventDefault();
-};
+// const Pin = (e) => {
+//   e.preventDefault();
+// };
 
 const hadnleEnded = () => {
   const { id } = videoContainer.dataset;
@@ -141,4 +140,4 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
 
 document.addEventListener("keydown", handleSpaceBarevent);
-window.addEventListener("keydown", Pin);
+// window.addEventListener("keydown", Pin);

@@ -8,14 +8,14 @@ module.exports = {
     main: "./src/client/js/main.js",
     videoPlayer: "./src/client/js/videoPlayer.js",
     recorder: "./src/client/js/recorder.js",
+    commentSection: "./src/client/js/commentSection.js",
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "css/styles.css",
     }),
   ],
-  mode: "development",
-  watch: true,
+
   output: {
     filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),
