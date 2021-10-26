@@ -206,6 +206,7 @@ export const postEdit = async (req, res) => {
 
 export const getEdit = (req, res) => {
   console.log("여기에 오긴오니 시발");
+
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
