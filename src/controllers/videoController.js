@@ -66,6 +66,8 @@ export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 export const postUpload = async (req, res) => {
   // 이곳에서 비디오를 videos array에 추가할 예정
   const {
@@ -90,7 +92,7 @@ export const postUpload = async (req, res) => {
     const newVideo = await Video.create({
       title: title,
       description: description,
-      fileUrl: file.location,
+      fileUrl: isHeroku ? file.location : file.path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
