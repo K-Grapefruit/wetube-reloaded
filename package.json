@@ -4,7 +4,7 @@
   "description": "The best way to watch videos.",
   "scripts": {
     "start": "node build/init.js",
-    "build":"npm run build:server && npm run build:assets",
+    "build": "npm run build:server && npm run build:assets",
     "build:server": "babel src -d build",
     "build:assets": "webpack --mode=production",
     "dev:server": "nodemon",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/K-Grapefruit/wetube-reloaded#readme",
   "dependencies": {
     "@babel/runtime": "^7.15.4",
+    "aws-sdk": "^2.1015.0",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
     "dotenv": "^10.0.0",
@@ -32,6 +33,7 @@
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
+    "multer-s3": "^2.10.0",
     "node-fetch": "^2.6.1",
     "pug": "^3.0.2",
     "regenerator-runtime": "^0.13.9"

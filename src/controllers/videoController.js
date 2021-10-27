@@ -11,7 +11,7 @@ export const home = async (req, res) => {
     .sort({ createdAt: "desc" })
     .populate("owner"); // database에게 결과 값을 받을 때까지 기다려준다.
   //sort({ createAt: "desc" }) 내림차순
-
+  console.log(videos);
   return res.render("home", { pageTitle: "Home", videos }); // ({뷰 이름} , {템플릿에 보낼 변수})
 };
 export const watch = async (req, res) => {
